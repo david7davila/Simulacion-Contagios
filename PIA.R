@@ -1,22 +1,69 @@
-pob=10000
-m_estados=matrix(NA,nrow=pob,ncol=no_estados)
-for(i in 1:pob){
-  estados=rep(0,4)
-  pos=sample(c(1:3),1)
-  estados[pos]=1
-  m_estados[i,]=estados
-}
-m_estados
+pob<-10000
+Dias<-100
+PeriodoIncubacion<-14
+PeriodoEnfermedad<-42
 
-for(i in 1:100){
-  medidasprecaucion(i)
-  
-  
-  
+Mapa<-matrix(1,nrow=sqrt(pob),ncol=sqrt(pob)) 
+Poblacion<-matrix(NA,nrow=pob,ncol=6)
+colnames(Poblacion)<-c("Estado","Fila","Columna","Vacunado","Radio","TasaContagio")
+DataPob<- as.data.frame(Poblacion)
+
+#1-Susceptible, 2-Incubacion, 3-Infectado, 4-Recuperado, 5-Deceso
+DataPob$Estado<-rep(1) #Todos inician siendo Susceptible
+DataPob$Radio<-rep(15) #Todos inician con total libertad
+#DataPob$Estado<-sample(1:5,size=10000,TRUE)
+
+Mapa[sample(1:100,1),sample(1:100,1)]<-3 #Generamos el primer infectado del modelo
+
+for(i in 1:Dias){ #Comienza el conteo en dias
+  MedidasPrecaucion(i)
 }
-medidasprecaucion=function(i){
-  if(i>=40){
-    prob_cont=prob_cont-0.1
+
+#-----------------FUNCIONES ----------------------------------------------------------
+#Transmission rate,Travel radius ,Encounters per day    ,Hospital capacity 
+
+MedidasPrecaucion=function(i){
+  FASE1<-10   # Numero de infectados para activar la fase
+  FASE2<-200  # Numero de infectados para activar la fase
+  FASE3<-2000 # Numero de infectados para activar la fase
+  ControlDeFronteras <- 0 #0 Desactivado: La vigilancia es minima, 1 Activado: Cuarentena y estricta revision 
+  Infectados<-length(DataPob$Estado[DataPob$Estado==3]) #Numero de infectados
+  
+  
+  if(ControlDeFronteras==0){
+    A<-sample(c(3,0), 1, prob=c(0.5,0.5)) #Probabilidad de .5 que el que llegue al mapa este infectado
+    PX<-sample(1:100,1)
+    PY<-sample(1:100,1)
+    if(A==3){
+      Mapa[PX,PY]<-A #Se generan mas infectados que llegan a cualquier lugar del mapa  
+    }
+    
   }
+  
+  if(ControlDeFronteras==1){
+    A<-sample(c(3,0), 1, prob=c(0.1,0.9)) #Probabilidad de .1 que el que llegue al mapa este infectado
+    PX<-sample(1:100,1)
+    PY<-sample(1:100,1)
+    if(A==3){
+      Mapa[PX,PY]<-A #Se generan Menos infectados que llegan a cualquier lugar del mapa  
+    }
+  }
+  
+  sample(c(3,0), 1, prob=c(0.1,0.9))
+  
+  if(Infectados>=FASE1){
+    DataPob$Radio<-10
+    DataPob$TasaContagio<-0.90
+  }
+  if(Infectados>=FASE2){
+    DataPob$Radio<-5
+    DataPob$TasaContagio<-0.60
+    ControlDeFronteras<-1
+  }
+  if(Infectados>=FASE3){
+    DataPob$Radio<-1
+    DataPob$TasaContagio<-0.30
+  }
+
   return 
 }
