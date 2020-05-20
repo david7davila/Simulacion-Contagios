@@ -2,7 +2,7 @@ pob<-10000
 Dias<-100
 PeriodoIncubacion<-14
 PeriodoEnfermedad<-42
-
+    #CARLOS ES PUTO
 #Columna 1: Identificador del individuo (número:ID)
 #Columna 2: Posicion dentro del Tablero (fila)
 #Columna 3: Posicion dentro del Tablero (columna)
