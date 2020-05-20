@@ -15,7 +15,7 @@ PeriodoEnfermedad<-42
 #Columna 10: Trabaja
 #Columna 11: TipoTraslado
 #Columna 12: TipodeTrabajo
-
+#Columna 13
 
 Mapa<-matrix(1,nrow=sqrt(pob),ncol=sqrt(pob)) 
 Poblacion<-matrix(NA,nrow=pob,ncol=12)
