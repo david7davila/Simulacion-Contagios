@@ -7,7 +7,7 @@ PeriodoEnfermedad<-42
 #Columna 2: Posicion dentro del Tablero (fila)
 #Columna 3: Posicion dentro del Tablero (columna)
 #Columna 4: Estado del individuo [0:susceptible, 1:infectado, 2:vacunado, 3:recuperado, 4:latente, 5:muerto, 6:cuarentena]
-#Columna 5: Edad [aï¿½os]
+#Columna 5: Edad [años]
 #Columna 6: Tasa de contagio [probabilidad]
 #Columna 7: Tasa de letalidad [probabilidad]
 #Columna 8: Tasa de vacunaciï¿½n [probabilidad]
@@ -20,21 +20,20 @@ Mapa<-matrix(1,nrow=sqrt(pob),ncol=sqrt(pob))
 Poblacion<-matrix(NA,nrow=pob,ncol=12)
 
 #1-Susceptible, 2-Incubacion, 3-Infectado, 4-Recuperado, 5-Deceso, 6-Cuarentena
-Poblacion[,1]<-c(1:pob) #Todos inician siendo Susceptible
+Poblacion[,1]<-c(1:pob) #Asignamos los id
 Poblacion[,4]<-rep(0) #Todos inician siendo Susceptible
 Poblacion[,9]<-rep(15) #Todos inician con total libertad
-Poblacion[,5]<-sample(0:100,size=10000,TRUE)
-Poblacion[,10]<-rep(0)
-Poblacion[,11]<-rep(1)
-
-L<-length(Poblacion[,5][Poblacion[,5]>18 & Poblacion[,5]<=65])
-Poblacion[,10][Poblacion[,5]>18 & Poblacion[,5]<=65]<-sample(c(0,1),size=L,TRUE,prob=c(.6,.4)) #De los mayores de 18 asigna quienes trabajan y quienes no
-Poblacion[,10][Poblacion[,1]<=20]
-Poblacion[,5][Poblacion[,1]<=20]
-
-LC<-length(Poblacion[,5][Poblacion[,5]>18 & Poblacion[,5]<=85])
-Poblacion[,11][Poblacion[,5]>18 & Poblacion[,5]<=85]<-sample(c(0,1),size=LC,TRUE,prob=c(.4,.6)) #De los mayores de 18 que conducen
+Poblacion[,5]<-sample(0:100,size=10000,TRUE) #Asigno edades aleatorias
+Poblacion[,10]<-rep(0) #Asigno que no trabajan a toda la poblacion
+Poblacion[,11]<-rep(1) #Asigno usan transporte publico a toda la poblacion
 Poblacion[,12]<-rep(0)
+
+L<-length(Poblacion[,5][Poblacion[,5]>=18 & Poblacion[,5]<=65])
+Poblacion[,10][Poblacion[,5]>=18 & Poblacion[,5]<=65]<-sample(c(0,1),size=L,TRUE,prob=c(.6,.4)) #De los mayores de 18 asigna quienes trabajan y quienes no
+
+LC<-length(Poblacion[,5][Poblacion[,5]>=18 & Poblacion[,5]<=85])
+Poblacion[,11][Poblacion[,5]>=18 & Poblacion[,5]<=85]<-sample(c(0,1),size=LC,TRUE,prob=c(.4,.6)) #De los mayores de 18 que conducen
+
 LT<-length(Poblacion[,10][Poblacion[,10]==1])
 Poblacion[,12][Poblacion[,10]==1]<-sample(c(1,2,3),size=LT,TRUE,prob=c(0.3,0.6,0.1)) #De los que trabajan que tipo de riesgo
 
@@ -95,7 +94,6 @@ MedidasPrecaucion=function(i,Poblacion){
       Poblacion$Estado[PY]<-6
     }
   }
-  
   
   return(Poblacion)
 }
