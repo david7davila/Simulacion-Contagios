@@ -56,11 +56,11 @@ MedidasPrecaucion=function(i,Poblacion){
   FASE1<-20   # Numero de infectados para activar la fase
   FASE2<-200  # Numero de infectados para activar la fase
   FASE3<-4000 # Numero de infectados para activar la fase
-  ControlDeFronteras <- 0 #0 Desactivado: La vigilancia es minima, 1 Activado: Cuarentena y estricta revision 
+ 
  
  #---------------
   x<-1/Poblacion[,6][Poblacion[,12]==1]
-  d<-(x-1)
+  d<-(x-1) 
   T_Trabaja<-(1+(d*.2)) #Proporcion de aumento de la tasa de infeccion por trabajo
  #---------------
   x<-1/Poblacion[,6][Poblacion[,12]==1 & Poblacion[,13]==1]
@@ -78,6 +78,7 @@ MedidasPrecaucion=function(i,Poblacion){
   Infectados<-length(Poblacion[,4][Poblacion[,4]==1]) #Numero de infectados
 
   if(i==1){ #Actualizacion de las probabilidades de contagio segun las caracteristicas de las personas
+  ControlDeFronteras <- 0 #0 Desactivado: La vigilancia es minima, 1 Activado: Cuarentena y estricta revision 
   Poblacion[,6][Poblacion[,12]==1]<-Poblacion[,6][Poblacion[,12]==1]*T_Trabaja
   Poblacion[,6][Poblacion[,12]==1 & Poblacion[,13]==1]<-Poblacion[,6][Poblacion[,12]==1 & Poblacion[,13]==1]*T_Transporte
   Poblacion[,6][Poblacion[,12]==1 & Poblacion[,14]==2]<-Poblacion[,6][Poblacion[,12]==1 & Poblacion[,14]==2]*T_MedioR
@@ -91,8 +92,9 @@ MedidasPrecaucion=function(i,Poblacion){
     NoTrabajaPox<-which(Cambio==0)
     PY_t<-Trabaja[NoTrabajaPox]
     Poblacion[PY_t,12]<-0
-    
     Poblacion[PY_t,6]<-Poblacion[PY_t,6]/T_Trabaja[NoTrabajaPox]
+    
+    
     Poblacion[,11]<-10
     Poblacion[,6]<-Poblacion[,6]*.95
   }
