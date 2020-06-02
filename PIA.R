@@ -124,21 +124,27 @@ MedidasPrecaucion=function(i,Poblacion){
     Poblacion[,6]<-Poblacion[,6]*.80
   }
   if(ControlDeFronteras==0){
-    A<-sample(c(3,0), 1, prob=c(0.5,0.5)) #Probabilidad de .5 que el que llegue al mapa este infectado
+    A<-sample(c(1,0), 1, prob=c(0.5,0.5)) #Probabilidad de .5 que el que llegue al mapa este infectado
     PX<-sample(1:sqrt(Pob),1)
     PY<-sample(1:sqrt(Pob),1)
-    if(A==3){
-      Mapa[PX,PY]<-A #Se generan mas infectados que llegan a cualquier lugar del mapa  
+    P<-sample(1:Pob,1)
+    if(A==1 && Poblacion[PY,4]== 0 ){
+      Poblacion[P,2]<-PY
+      Poblacion[P,3]<-PX
+      Poblacion[P,4]<-A
     }
   }
   if(ControlDeFronteras==1){ 
-    A<-sample(c(3,0), 1, prob=c(0.1,0.9)) #Probabilidad de .1 que el que llegue al mapa este infectado
+    A<-sample(c(1,0), 1, prob=c(0.1,0.9)) #Probabilidad de .1 que el que llegue al mapa este infectado
     PX<-sample(1:sqrt(Pob),1)
     PY<-sample(1:sqrt(Pob),1)
-    if(A==3 && Poblacion[PY,4]== 0 ){
-      Mapa[PX,PY]<-A #Se generan Menos infectados que llegan a cualquier lugar del mapa  
-      Poblacion[PY,4]<-6
+    P<-sample(1:Pob,1)
+    if(A==1 && Poblacion[PY,4]== 0 ){
+      Poblacion[P,2]<-PY
+      Poblacion[P,3]<-PX
+      Poblacion[P,16]<-1 #Se envia a cuarentena
     }
   }
   return(Poblacion)
 }
+
